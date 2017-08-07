@@ -3,7 +3,6 @@ pipeline {
 	stages {
 		stage('build') {
 			steps {
-				sh 'docker -v'
 				sh 'mvn --version'
 			}
 		}
