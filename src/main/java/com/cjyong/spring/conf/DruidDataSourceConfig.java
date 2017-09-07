@@ -30,7 +30,7 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(value="com.cjyong.spring.main.dao",entityManagerFactoryRef = "emf")
-@EntityScan("com.cjyong.spring.main.domain")
+@EntityScan("com.cjyong.spring.main.entity")
 public class DruidDataSourceConfig implements EnvironmentAware,TransactionManagementConfigurer{
 
     private RelaxedPropertyResolver propertyResolver;

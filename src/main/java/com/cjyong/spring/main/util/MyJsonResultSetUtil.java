@@ -1,6 +1,6 @@
 package com.cjyong.spring.main.util;
 
-import com.cjyong.spring.main.domain.dto.MyJsonResult;
+import com.cjyong.spring.main.entity.dto.MyJsonResult;
 
 /**
  * Created by cjyong on 2017/8/10.
