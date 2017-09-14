@@ -16,6 +16,18 @@ server:
 logging:
   config: classpath:log4j2.xml
 
+github:
+  client:
+    clientId: a045f77063be5b0ad5a7
+    clientSecret: 2f09a3768b526ab194f4501d168975d3de6ab04f
+    accessTokenUri: https://github.com/login/oauth/access_token
+    userAuthorizationUri: https://github.com/login/oauth/authorize
+    clientAuthenticationScheme: form
+    tokenName: oauth_token
+    authenticationScheme: query
+  resource:
+    userInfoUri: https://api.github.com/user
+
 spring:
   datasource:
         role: com.alibaba.druid.pool.DruidDataSource

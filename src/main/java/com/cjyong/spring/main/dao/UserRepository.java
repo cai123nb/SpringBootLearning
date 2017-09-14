@@ -12,7 +12,6 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User,Long>{
 
-    Optional<User> findFirstByNameAndPasswd(String name,String passwd);
-
+    User findFirstByNameAndPasswd(String name,String passwd);
 
 }

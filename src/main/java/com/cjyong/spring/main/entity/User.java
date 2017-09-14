@@ -9,7 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+
 import java.sql.Date;
 
 /**
@@ -21,7 +21,6 @@ import java.sql.Date;
 @Accessors(chain = true)
 @RequiredArgsConstructor(staticName = "of")
 public class User {
-
     @Id
     @GeneratedValue
     private Long id;
@@ -29,6 +28,8 @@ public class User {
     private String name;
     @NonNull
     private String passwd;
+
+    public User() {};
 
     private Date createdDate = new Date(System.currentTimeMillis());
 }

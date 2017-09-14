@@ -1,13 +1,14 @@
 package com.cjyong.spring.main.service.impl;
 
 import com.cjyong.spring.main.dao.UserRepository;
-import com.cjyong.spring.main.entity.User;
-import com.cjyong.spring.main.exception.DBOpeException;
+import com.cjyong.spring.main.entity.dto.UserDto;
 import com.cjyong.spring.main.service.UserService;
-import com.fasterxml.jackson.databind.util.BeanUtil;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Created by cjyong on 2017/8/10.
@@ -17,60 +18,53 @@ public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
 
-    public UserServiceImpl(UserRepository userRepository){
+    public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @Override
-    public boolean createUser(User user) {
-        if(null == user.getName()){
-            throw new IllegalArgumentException("name is null");
-        }
-        if(null == user.getPasswd()){
-            throw new IllegalArgumentException("password is null");
-        }
-        try{
-            userRepository.saveAndFlush(user);
-        } catch (Exception e){
-            throw new DBOpeException(" user insert error!");
-        }
-        return true;
+    public UserDto createUser(UserDto userDto) {
+        return Optional.ofNullable(userRepository.saveAndFlush(userDto.convertToUser()))
+                .map(user -> new UserDto(user))
+                .orElse(UserDto.empty());
     }
 
     @Override
-    public User getUserByNameAndPasswd(String name, String passwd) {
-        return userRepository.findFirstByNameAndPasswd(name,passwd)
-                .orElse(null);
+    public UserDto getUserByNameAndPasswd(String name, String passwd) {
+        return Optional.ofNullable(userRepository.findFirstByNameAndPasswd(name,passwd))
+                .map(user -> new UserDto(user))
+                .orElse(UserDto.empty());
     }
 
     @Override
-    public List<User> getUserList(){
-        return userRepository.findAll();
+    public List<UserDto> getUserList() {
+        return Optional.ofNullable(userRepository.findAll())
+                .map(users -> users.stream()
+                    .map(user -> new UserDto(user))
+                    .collect(Collectors.toList()))
+                .orElse(new ArrayList<>());
     }
 
     @Override
-    public User getUserById(long id) {
-        return userRepository.getOne(id);
+    public UserDto getUserById(long id) {
+        return Optional.ofNullable(userRepository.findOne(id))
+                .map(user -> new UserDto(user))
+                .orElse(UserDto.empty());
     }
 
     @Override
-    public User updateUserById(long id, User user) {
-        User oldUser = userRepository.findOne(id);
-        if(oldUser == null){
-            throw new NullPointerException("User is not exsited!");
-        }
-        user.setId(id);
-        userRepository.save(user);
-        return user;
+    public UserDto updateUserById(long id, UserDto userDto) {
+        Optional.ofNullable(userRepository.findOne(id))
+                .orElseThrow( () -> new NullPointerException("User is not exsit!") );
+
+        userDto.setId(id);
+        return Optional.ofNullable(userRepository.saveAndFlush(userDto.convertToUser()))
+                .map(user -> new UserDto(user))
+                .orElse(UserDto.empty());
     }
 
     @Override
-    public boolean deleteUserById(long id) {
-        try {
-            userRepository.delete(id);
-        } catch (Exception e) {
-            return false;
-        }
-        return true;
+    public void deleteUserById(long id) {
+        userRepository.delete(id);
     }
 }
