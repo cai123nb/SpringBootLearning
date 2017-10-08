@@ -14,6 +14,8 @@ import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger.web.ApiKeyVehicle;
+import springfox.documentation.swagger.web.SecurityConfiguration;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.List;
@@ -62,7 +64,7 @@ public class Swagger2Config {
 
     @Bean
     SecurityContext securityContext() {
-        AuthorizationScope[] scopes = new AuthorizationScope[]{new AuthorizationScope("userinfo", "用户信息")};
+        AuthorizationScope[] scopes = new AuthorizationScope[]{new AuthorizationScope("global", "Access everything")};
         SecurityReference securityReference = SecurityReference
                 .builder()
                 .reference("oauth2")
@@ -71,7 +73,7 @@ public class Swagger2Config {
         return SecurityContext
                 .builder()
                 .securityReferences(newArrayList(securityReference))
-                .forPaths(ant("/api/**"))
+                .forPaths(ant("/login"))
                 .build();
     }
 
@@ -85,7 +87,7 @@ public class Swagger2Config {
     }
 
     List<AuthorizationScope> scopes() {
-        return newArrayList(new AuthorizationScope("userinfo", "用户信息"));
+        return newArrayList(new AuthorizationScope("global", "Access everything"));
     }
 
     List<GrantType> grantTypes() {
@@ -94,4 +96,5 @@ public class Swagger2Config {
                 new TokenEndpoint(tokenUrl, tokenName)));
         return grants;
     }
+
 }

@@ -7,6 +7,7 @@ import com.cjyong.spring.main.service.UserService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
+import io.swagger.annotations.AuthorizationScope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -144,7 +145,8 @@ public class UserController {
      * 查询所用用户
      * @return
      */
-    @ApiOperation(value = "获取用户列表", authorizations = @Authorization(value = "userInfo"))
+    @ApiOperation(value = "获取用户列表")
+    @Authorization(value = "global", scopes = @AuthorizationScope(scope =  "global", description = "Access Everything"))
     @GetMapping("/user")
     @PreAuthorize("hasAuthority('ROLE_USER')")  // 指定角色权限才能操作方法
     public ModelAndView listUsers(Model model) {
